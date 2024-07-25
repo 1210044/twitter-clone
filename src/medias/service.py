@@ -1,18 +1,23 @@
-import aiofiles
+from typing import List
+from aiofiles import open as async_open
 from pathlib import Path
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import UploadFile
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
 from src.medias.models import Media
 
 
 async def write_file(file_url: Path, file: UploadFile) -> None:
-    async with aiofiles.open(file_url, 'wb') as f:
+    async with async_open(file_url, 'wb') as f:
         file_content = await file.read()
         await f.write(file_content)
 
 
-# async def 
+async def get_medias_by_ids(tweet_media_ids: List[int], session: AsyncSession) -> List:
+    stmt = select(Media).where(Media.id.in_(tweet_media_ids))
+    result = await session.execute(stmt)
+    return result.scalars().all()
 
 
 async def create_media(file_url, session: AsyncSession) -> Media:

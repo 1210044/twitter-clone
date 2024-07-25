@@ -65,24 +65,3 @@ async def create_data(num_users=10, num_tweets=20):
 
         session.add_all(follows)
         await session.commit()
-        # from sqlalchemy import select
-        # from sqlalchemy.orm import selectinload, joinedload
-        # from src.tweets.models import TweetLike
-        # try:
-            # result = await session.execute(select(User).options(selectinload(User.user_followers), selectinload(User.user_followings)))
-            # users: list[User] = result.scalars().all()
-            # for user in users:
-            #     followers_ids = [follower.id for follower in user.followers]
-            #     followings_ids = [following.id for following in user.followings]
-            #     logger.info(f'Пользователь: {user.id} \n\t\t Подписчики: {followers_ids} \n\t\t Подписки: {followings_ids}')
-        #     result = await session.execute(select(Tweet).options(
-        #         selectinload(Tweet.author), 
-        #         joinedload(Tweet.attachments).load_only('url'), 
-        #         joinedload(Tweet.tweets_likes).joinedload(TweetLike.user)
-        #         ))
-        #     tweets = list[Tweet] = result.scalars().all()
-        #     urls = []
-        #     logger.info()
-        # except Exception as e:
-        #     logger.error(f"Error: {e}")
-        # await session.commit()
