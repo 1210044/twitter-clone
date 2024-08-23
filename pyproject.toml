@@ -11,6 +11,7 @@ fastapi = "^0.111.0"
 sqlalchemy = "^2.0.30"
 asyncpg = "^0.29.0"
 aiofiles = "^23.2.1"
+alembic = "^1.13.2"
 
 
 [tool.poetry.group.dev.dependencies]
