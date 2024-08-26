@@ -34,12 +34,13 @@ async def delete_tweet_by_id(tweet_id: int, api_key: str = Header(...), session 
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
 
-    tweet = await TweetService.get_tweet_by_idx(tweet_id, session)
+    tweet = await TweetService.get_tweet_by_idx_with_attachments(tweet_id, session)
     if not tweet:
         raise HTTPException(status_code=404, detail='Tweet not found')
     
     if user.id == tweet.author_id:
-        await TweetService.delete_item(tweet, session)
+        await MediaService.delete_medias(tweet.attachments)
+        await TweetService.delete_tweet(tweet, session)
     
     return StatusResponse()
 

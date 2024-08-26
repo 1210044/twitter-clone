@@ -24,6 +24,14 @@ async def get_tweet_by_idx(tweet_id, session: AsyncSession) -> Tweet:
     return result.scalars().first()
 
 
+async def get_tweet_by_idx_with_attachments(tweet_id, session: AsyncSession) -> Tweet:
+    stmt = select(Tweet)\
+        .filter(Tweet.id == tweet_id)\
+        .options(joinedload(Tweet.attachments).load_only(Media.url))
+    result = await session.execute(stmt)
+    return result.scalars().first()
+
+
 async def get_tweet_like_by_tweet_id_and_user_id(
         tweet_id: int, user_id: int, session: AsyncSession
         ) -> TweetLike:
@@ -51,6 +59,6 @@ async def create_tweet(content: str, author: User, attachments: List, session: A
     return tweet_instance
 
 
-async def delete_item(item, session: AsyncSession) -> None:
-    await session.delete(item)
+async def delete_tweet(tweet, session: AsyncSession) -> None:
+    await session.delete(tweet)
     await session.commit()
