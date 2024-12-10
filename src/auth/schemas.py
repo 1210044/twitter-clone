@@ -1,6 +1,7 @@
 from typing import List
 from pydantic import BaseModel
-from src.schemas import StatusResponse
+
+from src.schemas import StatusResponseTrue
 
 
 class UserIn(BaseModel):
@@ -17,5 +18,5 @@ class User(UserBase):
     followings: List[UserBase] = []
 
 
-class UserOut(StatusResponse):
+class UserOut(StatusResponseTrue):
     user: User

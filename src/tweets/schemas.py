@@ -2,7 +2,7 @@ from typing import List
 from pydantic import BaseModel, field_validator
 
 from src.logger import logger
-from src.schemas import StatusResponse
+from src.schemas import StatusResponseTrue
 from src.auth.schemas import UserBase
 
 
@@ -11,7 +11,7 @@ class TweetIn(BaseModel):
     tweet_media_ids: List[int] = []
 
 
-class TweetOut(StatusResponse):
+class TweetOut(StatusResponseTrue):
     tweet_id: int
 
 
@@ -30,5 +30,5 @@ class Tweet(BaseModel):
         return values
 
 
-class TweetsOut(StatusResponse):
+class TweetsOut(StatusResponseTrue):
     tweets: List[Tweet] = []
