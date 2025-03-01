@@ -10,25 +10,28 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
     return JSONResponse(
         status_code=exc.status_code,
         content=ErrorResponse(
+            result=False,
             error_type=type(exc).__name__,
             error_message=exc.detail
         ).__dict__
     )
 
 
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    response_errors = []
-    for error in exc.errors():
-        response_errors.append(ErrorResponse(
-            error_type=error['type'],
-            error_message=error['msg']
-            )
-        )
-    return JSONResponse(
-        status_code=422,
-        content=jsonable_encoder(
-            ValidationErrors(
-                errors=response_errors
-            )
-        )
-    )
+# async def validation_exception_handler(request: Request, exc: RequestValidationError):
+#     response_errors = []
+#     for error in exc.errors():
+#         response_errors.append(ErrorResponse(
+#             result=False,
+#             error_type=error['type'],
+#             error_message=error['msg']
+#             )
+#         )
+#     return JSONResponse(
+#         status_code=422,
+#         content=jsonable_encoder(
+#             ValidationErrors(
+#                 result=
+#                 errors=response_errors
+#             )
+#         )
+#     )

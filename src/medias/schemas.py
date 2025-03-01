@@ -1,5 +1,5 @@
-from src.schemas import StatusResponseTrue
+from src.schemas import StatusResponse
 
 
-class MediaOut(StatusResponseTrue):
+class MediaOut(StatusResponse):
     media_id: int

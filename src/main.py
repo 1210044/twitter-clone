@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 
 from src.db import lifespan
 from src.config import STATIC_DIR, TWEETS_MEDIA_DIR
-from src.exceptions import custom_http_exception_handler, validation_exception_handler
+from src.exceptions import custom_http_exception_handler#, validation_exception_handler
 from src.schemas import ValidationErrors
 
 from src.auth.router import router as auth_router
@@ -25,7 +25,7 @@ app = FastAPI(
     }
 )
 
-app.add_exception_handler(RequestValidationError, validation_exception_handler)
+# app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(HTTPException, custom_http_exception_handler)
 
 app.include_router(auth_router, prefix='/api')

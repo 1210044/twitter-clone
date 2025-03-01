@@ -2,12 +2,8 @@ from typing import List
 from pydantic import BaseModel
 
 
-class StatusResponseTrue(BaseModel):
-    result: bool = True
-
-
-class StatusResponseFalse(BaseModel):
-    result: bool = False
+class StatusResponse(BaseModel):
+    result: bool
 
 
 class ValidationError(BaseModel):
@@ -15,9 +11,9 @@ class ValidationError(BaseModel):
     error_message: str
 
 
-class ErrorResponse(ValidationError, StatusResponseFalse):
+class ErrorResponse(ValidationError, StatusResponse):
     pass
 
 
-class ValidationErrors(StatusResponseFalse, BaseModel):
+class ValidationErrors(StatusResponse):
     errors: List[ValidationError]
