@@ -9,7 +9,7 @@ from src.models import Base
 
 PG_USER = 'admin'
 PG_PASSWORD = 'admin'
-PG_HOST = 'postgres'
+PG_HOST = 'localhost'
 PG_PORT = 5432
 PG_DATABASE_NAME = 'twitter'
 PG_DB_URL = f'postgresql+asyncpg://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE_NAME}'
