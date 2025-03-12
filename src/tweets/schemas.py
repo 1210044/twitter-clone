@@ -1,5 +1,5 @@
 from typing import List
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from src.logger import logger
 from src.schemas import StatusResponse
@@ -16,6 +16,7 @@ class TweetOut(StatusResponse):
 
 
 class Tweet(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     content: str
     attachments: List[str] = []

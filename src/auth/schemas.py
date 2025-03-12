@@ -1,6 +1,5 @@
 from typing import List
-from pydantic import BaseModel
-
+from pydantic import BaseModel, ConfigDict
 from src.schemas import StatusResponse
 
 
@@ -9,6 +8,7 @@ class UserIn(BaseModel):
 
 
 class UserBase(UserIn):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     api_key: str
 
