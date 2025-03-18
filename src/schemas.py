@@ -6,14 +6,14 @@ class StatusResponse(BaseModel):
     result: bool
 
 
-class ValidationError(BaseModel):
+class ErrorBase(BaseModel):
     error_type: str
     error_message: str
 
 
-class ErrorResponse(ValidationError, StatusResponse):
+class ErrorResponse(ErrorBase, StatusResponse):
     pass
 
 
 class ValidationErrors(StatusResponse):
-    errors: List[ValidationError]
+    errors: List[ErrorBase]

@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.encoders import jsonable_encoder
 
-from src.schemas import ErrorResponse, ValidationErrors
+from src.schemas import ErrorBase, ErrorResponse, ValidationErrors
 
 
 async def custom_http_exception_handler(request: Request, exc: HTTPException):
@@ -17,21 +17,32 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException):
     )
 
 
-# async def validation_exception_handler(request: Request, exc: RequestValidationError):
-#     response_errors = []
-#     for error in exc.errors():
-#         response_errors.append(ErrorResponse(
-#             result=False,
-#             error_type=error['type'],
-#             error_message=error['msg']
-#             )
-#         )
-#     return JSONResponse(
-#         status_code=422,
-#         content=jsonable_encoder(
-#             ValidationErrors(
-#                 result=
-#                 errors=response_errors
-#             )
-#         )
-#     )
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    response_errors = []
+    for error in exc.errors():
+        response_errors.append(ErrorBase(
+            error_type=error['type'],
+            error_message=error['msg'] + ', ' + ', '.join(error['loc'])
+            )
+        )
+    return JSONResponse(
+        status_code=422,
+        content=jsonable_encoder(
+            ValidationErrors(
+                result=False,
+                errors=response_errors
+            )
+        )
+    )
+
+# {
+#     "detail": [
+#         {
+#             "type": "missing",
+#             "loc": [
+#                 "header",
+#                 "api-key"
+#             ],
+#             "msg": "Field required",
+#             "input": null
+#         },

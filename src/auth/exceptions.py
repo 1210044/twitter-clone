@@ -1,6 +1,11 @@
 from fastapi import HTTPException
 
 
+class InvalidCredentialsException(HTTPException):
+    def __init__(self, detail: str = "Could not validate credentials"):
+        super().__init__(status_code=403, detail=detail)
+
+
 class UserNotFoundException(HTTPException):
     def __init__(self, detail: str = "User not found"):
         super().__init__(status_code=404, detail=detail)
