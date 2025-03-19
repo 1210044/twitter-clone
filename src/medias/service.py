@@ -11,7 +11,7 @@ from src.medias.models import Media
 
 
 async def write_file(file_url: Path, file: UploadFile) -> None:
-    async with aio_open(file_url, 'wb') as f:
+    async with aio_open(file_url, "wb") as f:
         file_content = await file.read()
         await f.write(file_content)
 

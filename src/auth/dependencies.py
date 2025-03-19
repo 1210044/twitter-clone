@@ -16,9 +16,8 @@ api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 
 
 async def get_user(
-        api_key: Optional[str] = Security(api_key_header), 
-        session = Depends(get_session)
-        ) -> User:
+    api_key: Optional[str] = Security(api_key_header), session=Depends(get_session)
+) -> User:
     try:
         api_key_schema = ApiKey(api_key=api_key)
     except ValidationError as e:

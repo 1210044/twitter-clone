@@ -8,16 +8,18 @@ from src.auth.schemas import UserOut
 from src.auth import exceptions, crud as UserCrud
 
 
-router = APIRouter(prefix='/users', tags=['Users'])
+router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.get('/me', response_model=UserOut, responses={404: {"model": ErrorResponse}})
+@router.get("/me", response_model=UserOut, responses={404: {"model": ErrorResponse}})
 async def get_user_me(user: User = Depends(get_user)) -> UserOut:
     return UserOut(result=True, user=user)
 
 
-@router.get('/{user_id}', response_model=UserOut, responses={404: {"model": ErrorResponse}})
-async def get_user_by_id(user_id: int, session = Depends(get_session)) -> UserOut:
+@router.get(
+    "/{user_id}", response_model=UserOut, responses={404: {"model": ErrorResponse}}
+)
+async def get_user_by_id(user_id: int, session=Depends(get_session)) -> UserOut:
     user = await UserCrud.get_user_by_id(user_id, session)
     if not user:
         raise exceptions.UserNotFoundException()
@@ -30,11 +32,17 @@ async def get_user_by_id(user_id: int, session = Depends(get_session)) -> UserOu
 #     return UserOut(result=True, user=user)
 
 
-@router.post('/{follow_id}/follow', response_model=StatusResponse, responses={404: {"model": ErrorResponse}})
-async def follow_user_by_id(follow_id: int, user: User = Depends(get_user), session = Depends(get_session)) -> StatusResponse:
+@router.post(
+    "/{follow_id}/follow",
+    response_model=StatusResponse,
+    responses={404: {"model": ErrorResponse}},
+)
+async def follow_user_by_id(
+    follow_id: int, user: User = Depends(get_user), session=Depends(get_session)
+) -> StatusResponse:
     if user.id == follow_id:
         raise exceptions.FollowToYouSelfException()
-      
+
     following = await UserCrud.get_user_by_id(follow_id, session)
     if not following:
         raise exceptions.UserToFollowNotFoundException()
@@ -43,8 +51,14 @@ async def follow_user_by_id(follow_id: int, user: User = Depends(get_user), sess
     return StatusResponse(result=True)
 
 
-@router.delete('/{follow_id}/follow', response_model=StatusResponse, responses={404: {"model": ErrorResponse}})
-async def unfollow_user_by_id(follow_id: int, user: User = Depends(get_user), session = Depends(get_session)) -> StatusResponse:
+@router.delete(
+    "/{follow_id}/follow",
+    response_model=StatusResponse,
+    responses={404: {"model": ErrorResponse}},
+)
+async def unfollow_user_by_id(
+    follow_id: int, user: User = Depends(get_user), session=Depends(get_session)
+) -> StatusResponse:
     if user.id == follow_id:
         raise exceptions.FollowToYouSelfException()
 

@@ -1,8 +1,8 @@
 from pathlib import Path
 
-STATIC_DIR = Path('static')
-MEDIA_DIR = Path('media')
-TWEETS_MEDIA_DIR = MEDIA_DIR / 'tweets'
+STATIC_DIR = Path("static")
+MEDIA_DIR = Path("media")
+TWEETS_MEDIA_DIR = MEDIA_DIR / "tweets"
 
 
 # # config.py
