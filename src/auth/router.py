@@ -26,12 +26,6 @@ async def get_user_by_id(user_id: int, session=Depends(get_session)) -> UserOut:
     return UserOut(result=True, user=user)
 
 
-# @router.post('', response_model=UserOut)
-# async def create_user(user_data: UserIn, session = Depends(get_session)) -> UserOut:
-#     user = await UserCrud.create_user(user_data, api_key, session)
-#     return UserOut(result=True, user=user)
-
-
 @router.post(
     "/{follow_id}/follow",
     response_model=StatusResponse,

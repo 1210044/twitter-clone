@@ -32,16 +32,6 @@ async def get_user_by_id(user_id: int, session: AsyncSession) -> User:
     return result.scalars().first()
 
 
-# async def get_user_by_id_with_followers(id: int, session: AsyncSession) -> User:
-#     stmt = select(User)\
-#         .filter(User.id == id)\
-#         .options(
-#             joinedload(User.user_followers).joinedload(Follow.follower)
-#         )
-#     result = await session.execute(stmt)
-#     return result.scalars().first()
-
-
 async def create_user(user_in: UserIn, api_key: str, session: AsyncSession) -> User:
     user = await get_user_by_api_key(api_key, session)
     if not user:
