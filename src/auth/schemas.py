@@ -1,5 +1,5 @@
 from typing import List
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 from src.schemas import StatusResponse
 
 
@@ -11,7 +11,7 @@ class UserIn(BaseModel):
     name: str
 
 
-class UserBase(UserIn, ApiKey):
+class UserBase(UserIn):
     model_config = ConfigDict(from_attributes=True)
     id: int
 

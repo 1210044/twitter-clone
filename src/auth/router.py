@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Header, Depends
+from fastapi import APIRouter, Depends
 
 from src.db import get_session
 from src.schemas import StatusResponse, ErrorResponse
 from src.auth.models import User
 from src.auth.dependencies import get_user
-from src.auth.schemas import UserIn, UserOut
+from src.auth.schemas import UserOut
 from src.auth import exceptions, crud as UserCrud
 
 

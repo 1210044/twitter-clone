@@ -22,7 +22,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     for error in exc.errors():
         response_errors.append(ErrorBase(
             error_type=error['type'],
-            error_message=error['msg'] + ', ' + ', '.join(error['loc'])
+            error_message=error['msg']
             )
         )
     return JSONResponse(
@@ -34,15 +34,3 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
             )
         )
     )
-
-# {
-#     "detail": [
-#         {
-#             "type": "missing",
-#             "loc": [
-#                 "header",
-#                 "api-key"
-#             ],
-#             "msg": "Field required",
-#             "input": null
-#         },
