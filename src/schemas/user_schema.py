@@ -3,13 +3,17 @@ from pydantic import BaseModel, ConfigDict
 from src.schemas.status_schema import Status
 
 
-class UserIn(BaseModel):
+class UserCreate(BaseModel):
     name: str
 
 
-class UserBase(UserIn):
+class UserBase(UserCreate):
     model_config = ConfigDict(from_attributes=True)
     id: int
+
+
+class UserUpdate(UserBase):
+    pass
 
 
 class User(UserBase):

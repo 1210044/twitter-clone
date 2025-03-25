@@ -1,23 +1,21 @@
-from fastapi import APIRouter, File, UploadFile, Depends
+from fastapi import APIRouter, UploadFile, Depends
 
 from src.config.project_config import settings
-from src.config.database.db_helper import db_helper
-from src.auth.dependencies import get_user
+from src.dependencies.auth_dependencies import get_current_user
 from src.models.user_model import User
-from src.schemas.media_schema import MediaCreate, MediaOut
-from src.medias import service as MediaService
-from src.medias import crud as MediaCrud
+from src.schemas.media_schema import MediaCreate, MediaResponse
+from src.services.media_service import media_service
+
 
 router = APIRouter(prefix="/medias")
 
 
-@router.post("", response_model=MediaOut)
+@router.post("", response_model=MediaResponse)
 async def upload_media(
-    user: User = Depends(get_user),
-    session=Depends(db_helper.get_db_session),
-    file: UploadFile = File(...),
-) -> MediaOut:
+    file: UploadFile,
+    user: User = Depends(get_current_user),
+) -> MediaResponse:
     file_url = settings.TWEETS_MEDIA_DIR / file.filename
-    await MediaService.write_file(file_url, file)
-    media_instance = await MediaCrud.create_media(file_url.as_posix(), session)
-    return MediaOut(result=True, media_id=media_instance.id)
+    # await MediaService.write_file(file_url, file)
+    media_instance = await media_service.create(file_url)
+    return MediaResponse(result=True, media_id=media_instance.id)

@@ -8,7 +8,7 @@ from src.models.tweet_like_model import TweetLike
 
 class User(Base):
     __tablename__ = "users"
-    id = Column(Integer, Identity(start=1, increment=1, cycle=False), primary_key=True)
+    # id = Column(Integer, Identity(start=1, increment=1, cycle=False), primary_key=True)
     name = Column(String(200), index=True, nullable=False)
     api_key = Column(String(200), index=True, nullable=False)
 

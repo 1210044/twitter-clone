@@ -1,8 +1,10 @@
 import random
 
 from src.config.database.db_helper import db_helper
-from src.auth.models import User, Follow
-from src.tweets.models import Tweet
+from src.models.user_model import User
+from src.models.follow_model import Follow
+from src.models.tweet_model import Tweet
+
 
 async def create_data(num_users=10, num_tweets=20):
     async with db_helper.get_db_session() as session:

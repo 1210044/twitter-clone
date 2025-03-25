@@ -9,7 +9,7 @@ from src.models.tweet_like_model import TweetLike
 
 class Tweet(Base):
     __tablename__ = "tweets"
-    id = Column(Integer, Identity(start=1, increment=1, cycle=False), primary_key=True)
+    # id = Column(Integer, Identity(start=1, increment=1, cycle=False), primary_key=True)
     content = Column(String(4000), index=True, nullable=False)
     author_id = Column(
         Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False

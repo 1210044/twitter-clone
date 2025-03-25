@@ -1,3 +1,20 @@
+from src.models.user_model import User
+from src.schemas.user_schema import UserCreate, UserUpdate
+from src.repositories.sqlalchemy_repository import SqlAlchemyRepository
+from src.config.database.db_helper import db_helper
+
+
+class UserRepository(SqlAlchemyRepository[User, UserCreate, UserUpdate]):
+    pass
+
+
+user_repository = UserRepository(model=User, db_session=db_helper.get_db_session)
+
+
+
+
+
+
 # from sqlalchemy import select, insert, delete
 # from sqlalchemy.orm import joinedload
 # from sqlalchemy.ext.asyncio import AsyncSession

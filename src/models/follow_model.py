@@ -8,7 +8,7 @@ from src.models.user_model import User
 class Follow(Base):
     __tablename__ = "users_follows"
     __table_args__ = (UniqueConstraint("following_id", "follower_id"),)
-    id = Column(Integer, Identity(start=1, increment=1, cycle=False), primary_key=True)
+    # id = Column(Integer, Identity(start=1, increment=1, cycle=False), primary_key=True)
     following_id = Column(
         Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
