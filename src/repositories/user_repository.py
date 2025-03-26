@@ -11,12 +11,8 @@ class UserRepository(SqlAlchemyRepository[User, UserCreate, UserUpdate]):
 user_repository = UserRepository(model=User, db_session=db_helper.get_db_session)
 
 
-
-
-
-
 # from sqlalchemy import select, insert, delete
-# from sqlalchemy.orm import joinedload
+# from sqlalchemy.orm import joinedload, se
 # from sqlalchemy.ext.asyncio import AsyncSession
 
 # from src.auth.models import User, Follow
@@ -28,8 +24,8 @@ user_repository = UserRepository(model=User, db_session=db_helper.get_db_session
 #         select(User)
 #         .filter(User.api_key == api_key)
 #         .options(
-#             joinedload(User.user_followers).joinedload(Follow.follower),
-#             joinedload(User.user_followings).joinedload(Follow.following),
+#             selectinload(User.user_followers).selectinload(Follow.follower),
+#             selectinload(User.user_followings).selectinload(Follow.following),
 #         )
 #     )
 #     result = await session.execute(stmt)

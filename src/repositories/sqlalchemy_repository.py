@@ -1,8 +1,8 @@
-from typing import Any, Type, TypeVar, Optional, Generic
+from typing import Any, List, Type, TypeVar, Optional, Generic
 
 from pydantic import BaseModel
 from sqlalchemy import delete, select, update
-from sqlalchemy.orm import load_only
+from sqlalchemy.orm import load_only, selectinload, joinedload
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..models.base_model import Base
@@ -45,13 +45,31 @@ class SqlAlchemyRepository(AbstractRepository, Generic[ModelType, CreateSchemaTy
         async with self._session_factory() as session:
             row = await session.execute(select(self.model).filter_by(**filters))
             return row.scalar_one_or_none()
+    
+    async def get_single(
+        self, 
+        related: Optional[List[str]] = None, 
+        join_related: Optional[List[str]] = None, 
+        **filters
+    ) -> Optional[ModelType]:
+        async with self._session_factory() as session:
+            stmt = select(self.model).filter_by(**filters)
+
+            if related:
+                stmt = stmt.options(*(selectinload(getattr(self.model, relation)) for relation in related))
+
+            if join_related:
+                stmt = stmt.options(*(joinedload(getattr(self.model, relation)) for relation in join_related))
+
+            row = await session.execute(stmt)
+            return row.scalar_one_or_none()
 
     async def get_multi(
             self,
             order: str = "id",
             limit: int = 100,
             offset: int = 0
-    ) -> list[ModelType]:
+    ) -> List[ModelType]:
         async with self._session_factory() as session:
             stmt = select(self.model).order_by(*order).limit(limit).offset(offset)
             row = await session.execute(stmt)
@@ -64,7 +82,7 @@ class SqlAlchemyRepository(AbstractRepository, Generic[ModelType, CreateSchemaTy
             order: list[str] | None = None,
             limit: int = 100,
             offset: int = 0,
-    ) -> list[ModelType] | None:
+    ) -> List[ModelType] | None:
         async with self._session_factory() as session:
             stmt = select(self.model)
 
@@ -92,7 +110,7 @@ class SqlAlchemyRepository(AbstractRepository, Generic[ModelType, CreateSchemaTy
             row = await session.execute(stmt)
             return row.scalars().all()
 
-    async def all(self) -> list[ModelType] | None:
+    async def all(self) -> List[ModelType] | None:
         return await self.filter()
 
     async def exists(self, **filters) -> bool:

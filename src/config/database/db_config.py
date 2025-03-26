@@ -20,4 +20,4 @@ class ConfigDataBase(BaseSettings):
         )
 
 
-settings_db = ConfigDataBase()
+settings_db = ConfigDataBase(POSTGRES_HOST='localhost')

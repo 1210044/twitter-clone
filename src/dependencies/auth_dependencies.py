@@ -16,13 +16,13 @@ api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 
 
 async def get_current_user(
-    api_key: Optional[str] = Security(api_key_header), session=Depends(db_helper.get_db_session())
+    api_key: Optional[str] = Security(api_key_header)
 ) -> User:
     try:
         api_key_schema = ApiKey(api_key=api_key)
     except ValidationError as e:
         raise RequestValidationError(errors=e.errors())
-    user = 'admin' # await user_service.get_user_by_api_key(api_key_schema.api_key, session)
+    user = await user_service.get_user_by_api_key(api_key_schema.api_key)
     if not user:
         raise user_exceptions.InvalidCredentialsException()
     return user

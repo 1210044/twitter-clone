@@ -12,9 +12,9 @@ from src.exceptions import user_exceptions
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-# @router.get("/me", response_model=UserOut, responses={404: {"model": ErrorOut}})
-# async def get_user_me(user: User = Depends(get_current_user)) -> UserOut:
-#     return UserOut(result=True, user=user)
+@router.get("/me", response_model=UserOut, responses={404: {"model": ErrorOut}})
+async def get_user_me(user: User = Depends(get_current_user)) -> UserOut:
+    return UserOut(result=True, user=user)
 
 
 # @router.get(
