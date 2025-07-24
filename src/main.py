@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.staticfiles import StaticFiles
 
+from src.core.utils.logging import setup_logging
 from src.core.lifespan import lifespan
 from src.config.project_config import settings
 from src.exceptions.exception_handlers import custom_http_exception_handler, validation_exception_handler
@@ -11,6 +12,8 @@ from src.routers.user_router import router as auth_router
 from src.routers.tweet_router import router as tweet_router
 from src.routers.media_router import router as media_router
 
+
+setup_logging()
 
 app = FastAPI(
     title="Twitter Clone",

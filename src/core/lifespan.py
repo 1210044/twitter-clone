@@ -1,12 +1,14 @@
 from shutil import rmtree
 from contextlib import asynccontextmanager
 
-from src.config.project_config import settings
-from src.core.logger import logger
-from src.models.base_model import Base
-from src.config.database.db_helper import db_helper
-from src.config.database.db_generate_data import create_data
+from src.core.config.project_config import settings
+from src.core.utils.logging import get_logger
+from src.core.models.base import Base
+from src.core.config.database.db_helper import db_helper
+from src.core.config.database.db_generate_data import create_data
 
+
+logger = get_logger(__name__)
 
 @asynccontextmanager
 async def lifespan(app):
