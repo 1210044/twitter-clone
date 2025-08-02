@@ -2,9 +2,9 @@ from sqlalchemy import Column, Integer, String, Identity, ForeignKey, UniqueCons
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship
 
-from src.models.base_model import Base
-from src.models.media_model import Media
-from src.models.tweet_like_model import TweetLike
+from src.core.models.base import Base
+from src.modules.media.models import Media
+from src.modules.tweets.models import TweetLike
 
 
 class Tweet(Base):
@@ -14,7 +14,6 @@ class Tweet(Base):
     author_id = Column(
         Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
-
     attachments = relationship(Media, back_populates="tweet")
     author = relationship("User", back_populates="tweets")
     tweets_likes = relationship("TweetLike", back_populates="tweet")

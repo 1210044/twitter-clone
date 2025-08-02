@@ -1,24 +1,44 @@
-from typing import Optional
-from sqlalchemy.orm import selectinload, joinedload
+from typing import Dict, List, Optional, Any
+from sqlalchemy.orm import selectinload
+from enum import StrEnum
 
-from src.models.user_model import User
-from src.models.follow_model import Follow
-from src.schemas.user_schema import UserCreate, UserUpdate
-from src.repositories.sqlalchemy_repository import SqlAlchemyRepository
-from src.config.database.db_helper import db_helper
+from src.shared.repositories.sqlalchemy import SqlAlchemyRepository
+from src.core.config.database.db_helper import db_helper
+from src.modules.users.models import User
+from src.modules.users.models import Follow
+from src.modules.users.schemas import UserCreate, UserUpdate
+
+
+class UserLoadOption(StrEnum):
+    FOLLOWERS = "followers"
+    FOLLOWING = "following"
 
 
 class UserRepository(SqlAlchemyRepository[User, UserCreate, UserUpdate]):
-    async def get_by_api_key(
-            self, 
-            api_key: str
-            ) -> Optional[User]:
-        user = await self.get_single(
-            selectinload(User.user_followers).selectinload(Follow.follower), 
-            selectinload(User.user_followings).selectinload(Follow.following), 
-            api_key=api_key
-            )
-        return user
+    _LOAD_OPTIONS = {
+        UserLoadOption.FOLLOWERS: selectinload(User.user_followers).selectinload(Follow.follower),
+        UserLoadOption.FOLLOWING: selectinload(User.user_followings).selectinload(Follow.following),
+    }
+    
+    async def get_user(
+        self,
+        *,
+        filters: Optional[Dict[str, Any]] = None,
+        load_options: Optional[List[UserLoadOption]] = None,
+    ) -> Optional[User]:
+        options_list = []
+        
+        # Применяем выбранные стратегии загрузки
+        if load_options:
+            for option in load_options:
+                strategy = self._LOAD_STRATEGIES.get(option)
+                
+                if isinstance(strategy, list):
+                    options_list.extend(strategy)
+                elif strategy:
+                    options_list.append(strategy)
+        
+        return await self.get_one(*options_list, **(filters or {}))
 
 
 user_repository = UserRepository(model=User, db_session=db_helper.get_db_session)
